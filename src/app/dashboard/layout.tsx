@@ -1,15 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Figtree } from 'next/font/google';
 
-
-const figtree = Figtree({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-figtree',
-  weight: ['300', '400', '500', '600', '700', '800', '900']
-});
+import Navbar from "@/components/Navbar";
 
 
 export const metadata: Metadata = {
@@ -24,8 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={figtree.variable}>
-        {children}
+      <body>
+        
+          <Navbar>
+            {children}
+          </Navbar>
+        
       </body>
     </html>
   );
