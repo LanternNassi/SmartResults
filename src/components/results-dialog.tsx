@@ -126,12 +126,22 @@ const resultData = [
     }
   }
 ];
-
+interface School {
+  id: number;
+  name: string;
+  address: string;
+  email: string;
+  phoneNumber: string;
+  principal: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export function ResultsDialog({ children }: ResultsDialogProps) {
   const [indexNumber, setIndexNumber] = useState("")
   const [email, setEmail] = useState("")
   const [school, setSchool] = useState("")
+  const [schoolobj , setschoolobj] = useState<School | null>(null)
   const [name, setName] = useState("")
 
   const [student, setstudent] = useState<Student | null>(null)
@@ -203,6 +213,17 @@ export function ResultsDialog({ children }: ResultsDialogProps) {
 
   const getStudentByIndex = async (index: string) => {
     const res = await fetch(`/api/interactive/student?index=${index}`, {
+      method: "GET",
+      cache: "no-store",
+    })
+    if (!res.ok) {
+      throw new Error("Failed to fetch data")
+    }
+    return res.json()
+  }
+
+  const getSchoolById = async (id: number) => {
+    const res = await fetch(`/api/schools/${id}`, {
       method: "GET",
       cache: "no-store",
     })
@@ -308,8 +329,8 @@ export function ResultsDialog({ children }: ResultsDialogProps) {
           </div>
           <DialogFooter>
             {
-              results && student ? (
-                <BlobProvider document={<StudentResultPDF student={student as Student} result={results?.result || []} />}>
+              results && student  && schoolobj ? (
+                <BlobProvider document={<StudentResultPDF student={student as Student} school={schoolobj as School} result={results?.result || []} />}>
                   {({ blob, url, loading, error }) => (
                     <div className="flex flex-col gap-4">
                       {/* Preview button using the URL */}
@@ -358,6 +379,14 @@ export function ResultsDialog({ children }: ResultsDialogProps) {
                   onClick={() => {
                     if (student) {
                       setIsSubmitting(true);
+                      getSchoolById(student.schoolId).then((data) => {
+                        if (data.error) {
+                          setError(data.error)
+                        }else {
+                          setschoolobj(data)
+                        }
+                      }
+                      )
                       getStudentResults(student.id).then((data) => {
                         setIsSubmitting(false);
                         if (data.error) {

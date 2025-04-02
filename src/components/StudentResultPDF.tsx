@@ -17,6 +17,17 @@ interface Student {
   updatedAt: string
 }
 
+interface School {
+  id: number;
+  name: string;
+  address: string;
+  email: string;
+  phoneNumber: string;
+  principal: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Define styles for the PDF document
 const styles = StyleSheet.create({
   page: {
@@ -219,7 +230,8 @@ const getGradeColor = (grade: string) => {
 }
 
 interface StudentResultProps {
-  student: Student
+  student: Student;
+  school: School;
   result: Array<{
     id: number
     result: number
@@ -235,7 +247,7 @@ interface StudentResultProps {
 }
 
 // PDF Document Component
-export const StudentResultPDF = ({ student, result }: StudentResultProps) => {
+export const StudentResultPDF = ({ student, result, school }: StudentResultProps) => {
   // Calculate total marks
   const totalMarks = result.reduce((sum, item) => sum + item.result, 0)
 
@@ -252,7 +264,7 @@ export const StudentResultPDF = ({ student, result }: StudentResultProps) => {
         {/* Header Section */}
         <View style={styles.header}>
           <Text style={styles.headerText}>STUDENT ACADEMIC RESULTS</Text>
-          <Text style={styles.schoolName}>Example High School</Text>
+          <Text style={styles.schoolName}>{school.name}</Text>
           <View style={styles.academicInfo}>
             <Text style={styles.academicInfoItem}>Academic Year: 2025</Text>
             <Text style={styles.academicInfoItem}>Term: First Term</Text>
@@ -347,7 +359,7 @@ export const StudentResultPDF = ({ student, result }: StudentResultProps) => {
           <Text>
             Document ID: {student.id}-{new Date().getTime()}
           </Text>
-          <Text>Example High School - Excellence in Education</Text>
+          <Text>{`${school.name} - ${school.address}`}</Text>
         </View>
       </Page>
     </Document>
@@ -365,7 +377,7 @@ const StudentResultsPDFGenerator = ({ student, result }: StudentResultProps) => 
 
       <div className="flex flex-col sm:flex-row gap-4 items-center">
         <PDFDownloadLink
-          document={<StudentResultPDF student={student} result={result} />}
+          document={<StudentResultPDF student={student} result={result} school={{ id: 1, name: "Example High School", address: "123 Main St", email: "info@example.com", phoneNumber: "123-456-7890", principal: "John Doe", createdAt: "2023-01-01", updatedAt: "2023-01-01" }} />}
           fileName={`${student.firstName}_${student.lastName}_results.pdf`}
           className="w-full sm:w-auto"
         >
