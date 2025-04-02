@@ -164,3 +164,5 @@ export default function SmartResults() {
   )
 }
 
+export const dynamic = 'force-dynamic'
+

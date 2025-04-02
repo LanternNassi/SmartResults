@@ -113,3 +113,6 @@ const GradeSettings: React.FC = () => {
 };
 
 export default GradeSettings;
+
+// In your page.js file
+export const dynamic = 'force-dynamic'

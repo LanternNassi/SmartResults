@@ -128,3 +128,5 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
 }
 
 export default Navbar
+
+export const dynamic = 'force-dynamic'
